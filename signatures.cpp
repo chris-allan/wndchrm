@@ -53,6 +53,18 @@
 #include <stdlib.h>
 #endif
 
+#include <string>
+#include <map>
+#ifdef HAVE_UNORDERED_MAP
+# include <unordered_map>
+# define MAP std::unordered_map
+#elif defined ( HAVE_TR1_UNORDERED_MAP )
+# include <tr1/unordered_map>
+# define MAP std::tr1::unordered_map
+#else
+# define MAP std::map
+#endif
+
 
 /* global variable */
 extern int verbosity;
@@ -843,236 +855,120 @@ void signatures::CompGroupD(ImageMatrix *matrix, const char *transform_label)
 */
 void signatures::ComputeGroups(ImageMatrix *matrix, int compute_colors)
 {
-  ImageMatrix *FourierTransform,*ChebyshevTransform,*ChebyshevFourierTransform,*WaveletSelector,*FourierWaveletSelector;
-  ImageMatrix *FourierChebyshev,*WaveletFourier,*ChebyshevWavelet, *EdgeTransform, *EdgeFourier, *EdgeWavelet;
-
-  count=0;      /* start counting signatures from 0 */
-
-
-/*
-
-// first level
-  CompGroupB(matrix,"raw");
-  CompGroupC(matrix,"raw");
-
-// second level
-  TempMatrix=matrix->duplicate();
-  TempMatrix->fft2();
-  CompGroupB(TempMatrix,"#f_");
-  CompGroupC(TempMatrix,"#f_");
-  delete TempMatrix;
-
-  TempMatrix=matrix->duplicate();
-  TempMatrix->ChebyshevTransform(0);
-  CompGroupB(TempMatrix,"#c_");
-  CompGroupC(TempMatrix,"#c_");
-  delete TempMatrix;
-
-  TempMatrix=matrix->duplicate();
-  TempMatrix->Symlet5Transform();
-  CompGroupB(TempMatrix,"#w_");
-  CompGroupC(TempMatrix,"#w_");
-  delete TempMatrix;
-
+  count=0;      // start counting signatures from 0
   
-// fourier / chebyshev
+	//ImageMatrix *FourierTransform,*ChebyshevTransform,*ChebyshevFourierTransform,*WaveletSelector,*FourierWaveletSelector;
+  //ImageMatrix *FourierChebyshev,*WaveletFourier,*ChebyshevWavelet, *EdgeTransform, *EdgeFourier, *EdgeWavelet;
 
-  TempMatrix=matrix->duplicate();
-  TempMatrix->fft2();
-  TempMatrix->ChebyshevTransform(0);
-  CompGroupB(TempMatrix,"#fc_");
-  CompGroupC(TempMatrix,"#fc_");
-  delete TempMatrix;
+	typedef MAP<std::string, ImageMatrix*> TransformMap;
+		
+	TransformMap transforms;
 
-  TempMatrix=matrix->duplicate();
-  TempMatrix->fft2();
-  TempMatrix->ChebyshevTransform(0);
-  TempMatrix->fft2();  
-  CompGroupB(TempMatrix,"#fcf_");
-  CompGroupC(TempMatrix,"#fcf_");
-  delete TempMatrix;
-
-  TempMatrix=matrix->duplicate();
-  TempMatrix->fft2();
-  TempMatrix->ChebyshevTransform(0);
-  TempMatrix->fft2();  
-  TempMatrix->ChebyshevTransform(0);  
-  CompGroupB(TempMatrix,"#fcfc_");
-  CompGroupC(TempMatrix,"#fcfc_");
-  delete TempMatrix;
+  //FourierTransform=matrix->duplicate();
+  //FourierTransform->fft2();
+	transforms["Fourier"] = matrix->duplicate();
+  transforms["Fourier"]->fft2();
   
-// chebyshev / fourier
+	//ChebyshevTransform=matrix->duplicate();
+  //ChebyshevTransform->ChebyshevTransform(0);
+  transforms["Chebyshev"] = matrix->duplicate();
+  transforms["Chebyshev"]->ChebyshevTransform(0);
 
-  TempMatrix=matrix->duplicate();
-  TempMatrix->ChebyshevTransform(0);
-  TempMatrix->fft2();
-  CompGroupB(TempMatrix,"#cf_");
-  CompGroupC(TempMatrix,"#cf_");
-  delete TempMatrix;
+  //ChebyshevFourierTransform=FourierTransform->duplicate();
+  //ChebyshevFourierTransform->ChebyshevTransform(0);
+  transforms["Chebyshev Fourier"] = transforms["Fourier"]->duplicate();
+  transforms["Chebyshev Fourier"]->ChebyshevTransform(0);
 
-  TempMatrix=matrix->duplicate();
-  TempMatrix->ChebyshevTransform(0);  
-  TempMatrix->fft2();
-  TempMatrix->ChebyshevTransform(0);  
-  CompGroupB(TempMatrix,"#cfc_");
-  CompGroupC(TempMatrix,"#cfc_");
-  delete TempMatrix;
+  //WaveletSelector=matrix->duplicate();
+  //WaveletSelector->Symlet5Transform();
+  transforms["Wavelet"] = matrix->duplicate();
+  transforms["Wavelet"]->Symlet5Transform();
 
-  TempMatrix=matrix->duplicate();
-  TempMatrix->ChebyshevTransform(0);
-  TempMatrix->fft2();  
-  TempMatrix->ChebyshevTransform(0);
-  TempMatrix->fft2();    
-  CompGroupB(TempMatrix,"#cfcf_");
-  CompGroupC(TempMatrix,"#cfcf_");
-  delete TempMatrix;
+  //FourierWaveletSelector=FourierTransform->duplicate();
+  //FourierWaveletSelector->Symlet5Transform();
+  transforms["Wavelet Fourier"] = transforms["Fourier"]->duplicate();
+  transforms["Wavelet Fourier"]->Symlet5Transform();
 
-// wavelet / fourier
+  //FourierChebyshev=ChebyshevTransform->duplicate();
+  //FourierChebyshev->fft2();
+  transforms["Fourier Chebyshev"] = transforms["Chebyshev"]->duplicate();
+  transforms["Fourier Chebyshev"]->fft2();
 
-  TempMatrix=matrix->duplicate();
-  TempMatrix->Symlet5Transform();
-  TempMatrix->fft2();
-  CompGroupB(TempMatrix,"#wf_");
-  CompGroupC(TempMatrix,"#wf_");
-  delete TempMatrix;
+  //WaveletFourier=WaveletSelector->duplicate();
+  //WaveletFourier->fft2();
+  transforms["Fourier Wavelet"] = transforms["Wavelet"]->duplicate();
+  transforms["Fourier Wavelet"]->fft2();
 
-  TempMatrix=matrix->duplicate();
-  TempMatrix->Symlet5Transform();  
-  TempMatrix->fft2();
-  TempMatrix->Symlet5Transform();  
-  CompGroupB(TempMatrix,"#wfw_");
-  CompGroupC(TempMatrix,"#wfw_");
-  delete TempMatrix;
+  //ChebyshevWavelet=WaveletSelector->duplicate();
+  //ChebyshevWavelet->ChebyshevTransform(0);
+  transforms["Chebyshev Wavelet"] = transforms["Wavelet"]->duplicate();
+  transforms["Chebyshev Wavelet"]->ChebyshevTransform(0);
 
-  TempMatrix=matrix->duplicate();
-  TempMatrix->Symlet5Transform();
-  TempMatrix->fft2();  
-  TempMatrix->Symlet5Transform();
-  TempMatrix->fft2();    
-  CompGroupB(TempMatrix,"#wfwf_");
-  CompGroupC(TempMatrix,"#wfwf_");
-  delete TempMatrix;
+  //EdgeTransform=matrix->duplicate();
+  //EdgeTransform->EdgeTransform();
+  transforms["Edge Transform"] = matrix->duplicate();
+  transforms["Edge Transform"]->EdgeTransform();
 
-// fourier / wavelet
+	// Historically named in the wrong order
+	//EdgeFourier=EdgeTransform->duplicate();
+  //EdgeFourier->fft2();
+	transforms["Edge Fourier Transform"] = transforms["Edge Transform"]->duplicate();
+	transforms["Edge Fourier Transform"]->fft2();
+	
+	// Historically named in the wrong order
+	//EdgeWavelet=EdgeTransform->duplicate();  
+  //EdgeWavelet->Symlet5Transform();
+	transforms["Edge Wavelet Transform"] = transforms["Edge Transform"]->duplicate();
+	transforms["Edge Wavelet Transform"]->Symlet5Transform();
 
-  TempMatrix=matrix->duplicate();
-  TempMatrix->fft2();
-  TempMatrix->Symlet5Transform();
-  CompGroupB(TempMatrix,"#fw_");
-  CompGroupC(TempMatrix,"#fw_");
-  delete TempMatrix;
-
-  TempMatrix=matrix->duplicate();
-  TempMatrix->fft2();  
-  TempMatrix->Symlet5Transform();  
-  TempMatrix->fft2();
-  CompGroupB(TempMatrix,"#fwf_");
-  CompGroupC(TempMatrix,"#fwf_");
-  delete TempMatrix;
-
-  TempMatrix=matrix->duplicate();
-  TempMatrix->fft2();  
-  TempMatrix->Symlet5Transform();
-  TempMatrix->fft2();    
-  TempMatrix->Symlet5Transform();  
-  CompGroupB(TempMatrix,"#fwfw_");
-  CompGroupC(TempMatrix,"#fwfw_");
-  delete TempMatrix;
-
-// chebyshev / wavelet
-
-  TempMatrix=matrix->duplicate();
-  TempMatrix->ChebyshevTransform(0);
-  TempMatrix->Symlet5Transform();
-  CompGroupB(TempMatrix,"#cw_");
-  CompGroupC(TempMatrix,"#cw_");
-  delete TempMatrix;
-
-  TempMatrix=matrix->duplicate();
-  TempMatrix->ChebyshevTransform(0);
-  TempMatrix->Symlet5Transform();  
-  TempMatrix->ChebyshevTransform(0);
-  CompGroupB(TempMatrix,"#cwc_");
-  CompGroupC(TempMatrix,"#cwc_");
-  delete TempMatrix;
-
-  TempMatrix=matrix->duplicate();
-  TempMatrix->ChebyshevTransform(0);
-  TempMatrix->Symlet5Transform();
-  TempMatrix->ChebyshevTransform(0);
-  TempMatrix->Symlet5Transform();  
-  CompGroupB(TempMatrix,"#cwcw_");
-  CompGroupC(TempMatrix,"#cwcw_");
-  delete TempMatrix;
-
-  return;
-*/
-
-
-
-
-  FourierTransform=matrix->duplicate();
-  FourierTransform->fft2();
-  ChebyshevTransform=matrix->duplicate();
-  ChebyshevTransform->ChebyshevTransform(0);
-  ChebyshevFourierTransform=FourierTransform->duplicate();
-  ChebyshevFourierTransform->ChebyshevTransform(0);
-  WaveletSelector=matrix->duplicate();
-  WaveletSelector->Symlet5Transform();
-  FourierWaveletSelector=FourierTransform->duplicate();
-  FourierWaveletSelector->Symlet5Transform();
-  FourierChebyshev=ChebyshevTransform->duplicate();
-  FourierChebyshev->fft2();
-  WaveletFourier=WaveletSelector->duplicate();
-  WaveletFourier->fft2();
-  ChebyshevWavelet=WaveletSelector->duplicate();
-  ChebyshevWavelet->ChebyshevTransform(0);
-  EdgeTransform=matrix->duplicate();
-  EdgeTransform->EdgeTransform();
-  EdgeFourier=EdgeTransform->duplicate();
-  EdgeFourier->fft2();
-  EdgeWavelet=EdgeTransform->duplicate();  
-  EdgeWavelet->Symlet5Transform();
-
+	TransformMap::iterator it = transforms.begin();
 
   CompGroupA(matrix,"");
   CompGroupB(matrix,"");
   CompGroupC(matrix,"");
   if (compute_colors) CompGroupD(matrix,"");
 
-  CompGroupB(FourierTransform,"Fourier");
-  CompGroupC(FourierTransform,"Fourier");
+ // CompGroupB(FourierTransform,"Fourier");
+ // CompGroupC(FourierTransform,"Fourier");
 
-  CompGroupB(WaveletSelector,"Wavelet");
-  CompGroupC(WaveletSelector,"Wavelet");
+ // CompGroupB(WaveletSelector,"Wavelet");
+ // CompGroupC(WaveletSelector,"Wavelet");
 
-  CompGroupB(ChebyshevTransform,"Chebyshev");
-  CompGroupC(ChebyshevTransform,"Chebyshev");
+ // CompGroupB(ChebyshevTransform,"Chebyshev");
+ // CompGroupC(ChebyshevTransform,"Chebyshev");
 // Fourier, then Chebyshev
-  CompGroupC(ChebyshevFourierTransform,"Chebyshev Fourier");
+ // CompGroupC(ChebyshevFourierTransform,"Chebyshev Fourier");
 // Fourier, then Wavelet
-  CompGroupC(FourierWaveletSelector,"Wavelet Fourier");
+ // CompGroupC(FourierWaveletSelector,"Wavelet Fourier");
 /**/
 // Wavelet, then Fourier
-  CompGroupB(WaveletFourier,"Fourier Wavelet");
-  CompGroupC(WaveletFourier,"Fourier Wavelet");
+  //CompGroupB(WaveletFourier,"Fourier Wavelet");
+  //CompGroupC(WaveletFourier,"Fourier Wavelet");
 
 // Chebyshev, then Fourier
-  CompGroupC(FourierChebyshev,"Fourier Chebyshev");
+  //CompGroupC(FourierChebyshev,"Fourier Chebyshev");
 // Wavelet, then Chebyshev
-  CompGroupC(ChebyshevWavelet,"Chebyshev Wavelet");
+  //CompGroupC(ChebyshevWavelet,"Chebyshev Wavelet");
 
-  CompGroupB(EdgeTransform,"Edge Transform");
-  CompGroupC(EdgeTransform,"Edge Transform");
+  //CompGroupB(EdgeTransform,"Edge Transform");
+  //CompGroupC(EdgeTransform,"Edge Transform");
 // Edge, then fourier - named in wrong order!
-  CompGroupB(EdgeFourier,"Edge Fourier Transform");
-  CompGroupC(EdgeFourier,"Edge Fourier Transform");
+ // CompGroupB(EdgeFourier,"Edge Fourier Transform");
+ // CompGroupC(EdgeFourier,"Edge Fourier Transform");
 
 // Edge, then wavelet - named in wrong order!
-  CompGroupB(EdgeWavelet,"Edge Wavelet Transform");
+  //CompGroupB(EdgeWavelet,"Edge Wavelet Transform");
 //printf("5.5\n");  
-  CompGroupC(EdgeWavelet,"Edge Wavelet Transform");
+  //CompGroupC(EdgeWavelet,"Edge Wavelet Transform");
 //printf("6\n");
+
+	for( it = transforms.begin(); it != transforms.end(); it++ ) {
+		CompGroupB( it->second, it->first.c_str() );
+		CompGroupC( it->second, it->first.c_str() );
+		delete it->second;
+		it->second = NULL;
+	}
+	/*
   delete FourierTransform;
   delete WaveletSelector;
   delete ChebyshevTransform;
@@ -1084,6 +980,8 @@ void signatures::ComputeGroups(ImageMatrix *matrix, int compute_colors)
   delete EdgeFourier;
   delete EdgeWavelet;
   delete FourierChebyshev;
+	*/
+
 //printf("7\n");  
 }
 
