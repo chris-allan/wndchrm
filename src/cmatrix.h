@@ -33,6 +33,8 @@
 #define cmatrixH
 //---------------------------------------------------------------------------
 
+#include <vector>
+#include <string> // for what_am_i definition
 #ifdef WIN32
   #include <vcl.h>
 #else  
@@ -47,6 +49,8 @@
 #define INF 10E200
 
 using namespace std;
+
+namespace mfg{
 class FeatureGroup;
 
 typedef unsigned char byte;
@@ -82,7 +86,6 @@ class ImageMatrix
   private:
    pix_data *data;                                 /* data of the colors                   */  
   public:
-	 friend class GiniCoefficient;
 	 //std::string what_am_i;                          // informative label
 	 int ColorMode;                                  /* can be cmRGB or cmHSV                */
    unsigned short bits;                            /* the number of intensity bits (8,16, etc) */
@@ -95,6 +98,7 @@ class ImageMatrix
    int SaveTiff(char *filename);                   /* save a matrix in TIF format          */
    int LoadPPM(char *filename, int ColorMode);     /* load from a PPM file                 */
    int OpenImage(char *image_file_name, int downsample, rect *bounding_rect, double mean, double stddev); /* load an image of any supported format */
+    //void CmatrixMessage();
    ImageMatrix();                                  /* basic constructor                    */
    ImageMatrix(int width,int height,int depth);    /* construct a new empty matrix         */
    ImageMatrix(ImageMatrix *matrix,int x1, int y1, int x2, int y2, int z1, int z2);  /* create a new matrix which is part of the original one */
@@ -142,9 +146,7 @@ class ImageMatrix
    void HaarlickTexture2D(double distance, double *out);
    void TamuraTexture2D(double *vec);
    void zernike2D(double *zvalues, long *output_size);
-	 double gini();
 };
-
 
 
 /* global functions */
@@ -152,5 +154,7 @@ HSVcolor RGB2HSV(RGBcolor rgb);
 RGBcolor HSV2RGB(HSVcolor hsv);
 TColor RGB2COLOR(RGBcolor rgb);
 double COLOR2GRAY(TColor color);
+
+} // end namespace mfg
 
 #endif

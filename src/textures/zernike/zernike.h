@@ -3,6 +3,7 @@
 #ifndef zernikeH
 #define zernikeH
 //---------------------------------------------------------------------------
+using namespace mfg;
 
 void mb_zernike2D(ImageMatrix *I, double D, double R, double *zvalues, long *output_size);
 

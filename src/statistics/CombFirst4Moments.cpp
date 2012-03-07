@@ -32,6 +32,8 @@
 #include <math.h>
 #include "CombFirst4Moments.h"
 
+using namespace mfg;
+
 double round(double x)
 {  double a;
    a=fabs(x-int(x));
@@ -309,13 +311,14 @@ int CombFirst4Moments2D(ImageMatrix *Im, double *vec)
 
    /* free the memory used by the function */
    for (a=0;a<n;a++)
-   {  delete I[a];
-      delete J[a];
-      delete J1[a];
+   {  delete [] I[a];
+      delete [] J[a];
+      delete [] J1[a];
    }
-   delete I;
-   delete J;
-   delete tmp;
+   delete [] I;
+   delete [] J;
+   delete [] J1;
+	 delete [] tmp;
 
    return(vec_count);
 }

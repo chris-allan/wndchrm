@@ -36,7 +36,8 @@
 #ifndef WIN32
 #include <stdio.h>
 #endif
-#include "ChebishevFourier.h"
+#include "ChebyshevFourier.h"
+using namespace mfg;
 
 #define min(a, b)  (((a) < (b)) ? (a) : (b))
 //---------------------------------------------------------------------------
@@ -104,8 +105,8 @@ void ChebyshevFourier2D(ImageMatrix *Im, long N, double *coeff_packed, int packi
       if (r[ind]<1)
          kk[nLast++]=ind;
    }  
-   delete xx;
-   delete yy;
+   delete [] xx;
+   delete [] yy;
    Nmax=(int)((min(m,n)-1)/2);
    if (N>Nmax) N=Nmax;
    NN = 2*N + 1;
@@ -145,8 +146,8 @@ void ChebyshevFourier2D(ImageMatrix *Im, long N, double *coeff_packed, int packi
       for (a=0;a<NN*NN*2;a++)                                 /* *2 because of the complex numbers */
        C[ind][a]=c[a];  /* can optimize this by moving it 4 lines upwards */
    }
-   delete tmp;
-   delete c;
+   delete []tmp;
+   delete [] c;
 
    min=INF;
    max=-INF;
@@ -170,15 +171,15 @@ void ChebyshevFourier2D(ImageMatrix *Im, long N, double *coeff_packed, int packi
         else coeff_packed[(int)(((coeff[a]-min)/(max-min))*32)]+=1;
      }
 
-   delete coeff;
+   delete [] coeff;
    for (a=0;a<nLast;a++)
-     delete C[a];
-   delete C;
-   delete f;
-   delete r;
-   delete kk;
-   delete img;
-   delete Tn;
+     delete [] C[a];
+   delete [] C;
+   delete [] f;
+   delete [] r;
+   delete [] kk;
+   delete [] img;
+   delete [] Tn;
 }
 
 
