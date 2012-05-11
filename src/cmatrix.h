@@ -50,7 +50,6 @@
 
 using namespace std;
 
-namespace mfg{
 class FeatureGroup;
 
 typedef unsigned char byte;
@@ -153,7 +152,5 @@ HSVcolor RGB2HSV(RGBcolor rgb);
 RGBcolor HSV2RGB(HSVcolor hsv);
 TColor RGB2COLOR(RGBcolor rgb);
 double COLOR2GRAY(TColor color);
-
-} // end namespace mfg
 
 #endif

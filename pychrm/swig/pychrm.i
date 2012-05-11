@@ -1,7 +1,7 @@
 %{
 /****************************************************************************/
-/*  mfGraph Library Python bindings                                         */
-/*  Copyright (c) 2003 Michael Foetsch                                      */
+/*  WND-CHARM Library Python bindings                                       */
+/*  Copyright (c) 2012 Ilya Goldberg, Christopher Coletta                   */
 /*                                                                          */
 /*  This library is free software; you can redistribute it and/or           */
 /*  modify it under the terms of the GNU Lesser General Public              */
@@ -17,8 +17,8 @@
 /*  License along with this library; if not, write to the Free Software     */
 /*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
 /*                                                                          */
-/*  Contact:    foetsch@yahoo.com                                           */
-/*              http://mfgraph.sourceforge.net/                             */
+/*  Contact:    igg@nih.gov, igg@cathilya.org                               */
+/*              http://code.google.com/p/wnd-charm/                         */
 /****************************************************************************/
 
 #include "cmatrix.h"
@@ -27,7 +27,7 @@
 #include "FeatureTransforms.h"
 %}
 
-%module pymfg
+%module pychrm
 
 
 %include "cmatrix.i"

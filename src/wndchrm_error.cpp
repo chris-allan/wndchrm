@@ -13,7 +13,6 @@
 #include "wndchrm_error.h"
 
 using namespace std;
-namespace mfg {
 
 #define MAX_ERROR_MESSAGE 512
 
@@ -141,4 +140,3 @@ const std::string getErrorString () {
 
 }
 
-} //end namespace mfg

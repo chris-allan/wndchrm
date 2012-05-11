@@ -37,7 +37,6 @@
 #endif
 
 #include "FeatureStatistics.h"
-using namespace mfg;
 
 typedef struct POINT1
 {  long x,y,z;

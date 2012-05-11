@@ -37,7 +37,6 @@
 #include <stdio.h>
 #endif
 #include "ChebyshevFourier.h"
-using namespace mfg;
 
 #define min(a, b)  (((a) < (b)) ? (a) : (b))
 //---------------------------------------------------------------------------

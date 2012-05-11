@@ -33,7 +33,6 @@
 #define FeatureStatisticsH
 //---------------------------------------------------------------------------
 #include "../cmatrix.h"
-using namespace mfg;
 
 int bwlabel(ImageMatrix *Im, int level);
 void GlobalCentroid(ImageMatrix *Im, double *x_centroid, double *y_centroid, double *z_cenroid);

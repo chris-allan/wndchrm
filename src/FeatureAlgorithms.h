@@ -6,7 +6,6 @@
 #include <string>
 
 
-namespace mfg {
 class ImageMatrix;
 
 class FeatureAlgorithm {
@@ -126,5 +125,4 @@ struct alg_name##AlgorithmRegistrar \
 }; \
 static alg_name##AlgorithmRegistrar alg_name##AlgorithmRegistrar_instance;
 */
-} //end namespace mfg
 #endif

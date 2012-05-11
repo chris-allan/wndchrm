@@ -28,7 +28,6 @@
 #include "complex.h"
 
 #include "zernike.h"
-using namespace mfg;
 
 //---------------------------------------------------------------------------
 

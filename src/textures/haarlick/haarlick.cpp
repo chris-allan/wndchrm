@@ -7,7 +7,6 @@
 #endif
 #include "haarlick.h"
 #include "CVIPtexture.h"
-using namespace mfg;
 
 //---------------------------------------------------------------------------
 /* haarlick

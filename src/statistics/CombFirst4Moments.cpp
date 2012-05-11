@@ -32,7 +32,6 @@
 #include <math.h>
 #include "CombFirst4Moments.h"
 
-using namespace mfg;
 
 double round(double x)
 {  double a;

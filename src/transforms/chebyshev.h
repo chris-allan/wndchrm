@@ -32,7 +32,6 @@
 #ifndef chevishevH
 #define chevishevH
 //---------------------------------------------------------------------------
-using namespace mfg;
 
 void Chebyshev2D(ImageMatrix *Im, double *out, int N);
 

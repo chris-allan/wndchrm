@@ -33,7 +33,6 @@
 //---------------------------------------------------------------------------
 
 #include "../cmatrix.h"
-using namespace mfg;
 
 double kurtosis(double *vec, double avg, double std, int length);
 int CombFirst4Moments2D(ImageMatrix *Im, double *vec);

@@ -1,13 +1,13 @@
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(pycharm, 0.1, christopher.coletta@nih.gov)
+AC_INIT(pychrm, 0.1, christopher.coletta@nih.gov)
 AC_CONFIG_MACRO_DIR(m4)
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR(src/cmatrix.cpp)
 
 AM_INIT_AUTOMAKE
 AC_PROG_CC
-AC_PROG_RANLIB
+
 
 AC_PROG_CXX
 AM_PROG_LEX
@@ -53,6 +53,5 @@ dnl DX_RTF_FEATURE(OFF)
 dnl DX_XML_FEATURE(OFF)
 dnl DX_PDF_FEATURE(OFF)
 dnl DX_PS_FEATURE(OFF)
-dnl DX_INIT_DOXYGEN(mfgraph, doxygen.cfg, doc)
 
-AC_OUTPUT(Makefile src/Makefile pymfg/Makefile)
+AC_OUTPUT(Makefile src/Makefile pychrm/Makefile)

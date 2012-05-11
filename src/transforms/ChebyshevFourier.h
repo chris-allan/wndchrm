@@ -33,7 +33,6 @@
 //---------------------------------------------------------------------------
 
 #include "../cmatrix.h"
-using namespace mfg;
 
 #include <vector>
 void ChebyshevFourier2D(ImageMatrix *Im, long N, double *coeff_packed, int packingOrder);

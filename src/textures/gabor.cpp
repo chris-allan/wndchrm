@@ -4,7 +4,6 @@
 #include <math.h>
 #include "../cmatrix.h"
 #include "gabor.h"
-using namespace mfg;
 
 
 //  conv2comp - conv2 when the smaller matrix is of complex numbers

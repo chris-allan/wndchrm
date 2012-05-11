@@ -8,7 +8,6 @@
 //start #including the functions directly once you start pulling them out of cmatrix
 //#include "transforms/Chebyshev.h"
 
-namespace mfg {
 void FeatureAlgorithm::print_info() const {
         std::cout << "FeatureAlgorithm: " << name << " (" << n_features << " features) " << std::endl;
 }
@@ -528,4 +527,3 @@ std::vector<double> GiniCoefficient::calculate( ImageMatrix * IN_matrix )
 }
 
 //WNDCHARM_REGISTER_ALGORITHM(GiniCoefficient)
-} //end namespace mfg

@@ -6,7 +6,6 @@
 #include "colors/FuzzyCalc.h" // for definition of compiler constant COLORS_NUM
 #include "transforms/fft/bcb_fftw3/fftw3.h"
 
-namespace mfg {
 void Transform::print_info() {
 
 }
@@ -251,5 +250,4 @@ ImageMatrix* HueTransform::transform( ImageMatrix * matrix_IN )
 }
 
 //WNDCHARM_REGISTER_TRANSFORM(HueTransform)
-} //end namespace mfg
 

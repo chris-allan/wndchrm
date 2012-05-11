@@ -3,7 +3,6 @@
 #ifndef gaborH
 #define gaborH
 //---------------------------------------------------------------------------
-using namespace mfg;
 
 void GaborTextureFilters2D(ImageMatrix *Im, double *ratios);
 

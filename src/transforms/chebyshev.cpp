@@ -35,7 +35,6 @@
 
 #include "../cmatrix.h"
 #include "chebyshev.h"
-using namespace mfg;
 
 //---------------------------------------------------------------------------
 

@@ -1,11 +1,11 @@
 
-AM_YFLAGS = -d -p mfg
+AM_YFLAGS = -d
 AM_LFLAGS = -o$(LEX_OUTPUT_ROOT).c
 AM_CPPFLAGS = -fPIC
 
-lib_LTLIBRARIES = libmfgraph.la
+lib_LTLIBRARIES = libchrm.la
 
-libmfgraph_la_SOURCES = \
+libchrm_la_SOURCES = \
        colors/FuzzyCalc.cpp \
        colors/FuzzyCalc.h \
        statistics/CombFirst4Moments.cpp \
@@ -70,4 +70,5 @@ libmfgraph_la_SOURCES = \
 			 FeatureAlgorithms.cpp \
 			 FeatureAlgorithms.h
 
-libmfgraph_la_LIBADD = -ltiff -L. -lfftw3
+libchrm_la_LIBADD = -ltiff -L. -lfftw3
+libchrm_la_CXXFLAGS = -Wall -g -O2 -fpermissive

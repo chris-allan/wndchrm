@@ -5,7 +5,6 @@
 #include "wndchrm_error.h"
 #include "cmatrix.h"
 
-namespace mfg {
 /*! Transform
  *  defines the interface for all inheriting transform classes
  *  Turns any class that inherits this interface into a singleton
@@ -79,6 +78,5 @@ struct tform_name##TransformRegistrar \
 static tform_name##TransformRegistrar tform_name##TransformRegistrar_instance;
 //std::cout << "call to register_transform " << #tform_name << " returned " << retval << std::endl; \
 */
-} //end namespace mfg
 #endif
 

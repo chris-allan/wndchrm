@@ -71,7 +71,7 @@
 
 using namespace std;
 
-RGBcolor mfg::HSV2RGB(HSVcolor hsv)
+RGBcolor HSV2RGB(HSVcolor hsv)
 {   RGBcolor rgb;
     float R=0, G=0, B=0;
     float H, S, V;
@@ -103,7 +103,7 @@ RGBcolor mfg::HSV2RGB(HSVcolor hsv)
     return rgb;
 }
 //-----------------------------------------------------------------------
-HSVcolor mfg::RGB2HSV(RGBcolor rgb)
+HSVcolor RGB2HSV(RGBcolor rgb)
 {
   float r,g,b,h,max,min,delta;
   HSVcolor hsv;
@@ -139,11 +139,11 @@ HSVcolor mfg::RGB2HSV(RGBcolor rgb)
 
 
 //--------------------------------------------------------------------------
-TColor mfg::RGB2COLOR(RGBcolor rgb)
+TColor RGB2COLOR(RGBcolor rgb)
 {  return((TColor)(rgb.blue*65536+rgb.green*256+rgb.red));
 }
 
-double mfg::COLOR2GRAY(TColor color1)
+double COLOR2GRAY(TColor color1)
 {  double r,g,b;
 
    r=(byte)(color1 & 0xFF);
@@ -156,11 +156,8 @@ double mfg::COLOR2GRAY(TColor color1)
 
 #ifdef WIN32
 
-/*
-namespace mfg {
-*/
 //--------------------------------------------------------------------------
-int mfg::ImageMatrix::LoadImage(TPicture *picture,int ColorMode)
+int ImageMatrix::LoadImage(TPicture *picture,int ColorMode)
 {  int a,b,x,y;
    pix_data pix;
    width=picture->Width;
@@ -184,12 +181,12 @@ int mfg::ImageMatrix::LoadImage(TPicture *picture,int ColorMode)
    return(1);
 }
 /*
-void mfg::ImageMatrix::CmatrixMessage()
+void ImageMatrix::CmatrixMessage()
 {
   printf( "you have succeeded.\n" ); 
 }
 */
-int mfg::ImageMatrix::LoadBMP(char *filename,int ColorMode)
+int ImageMatrix::LoadBMP(char *filename,int ColorMode)
 {  TPicture *picture;
    int ret_val;
    picture = new TPicture;
@@ -206,7 +203,7 @@ int mfg::ImageMatrix::LoadBMP(char *filename,int ColorMode)
 /* LoadTIFF
    filename -char *- full path to the image file
 */
-int mfg::ImageMatrix::LoadTIFF(char *filename)
+int ImageMatrix::LoadTIFF(char *filename)
 {
 //#ifndef WIN32
    unsigned long h,w,x,y,z;
@@ -287,7 +284,7 @@ int mfg::ImageMatrix::LoadTIFF(char *filename)
 /*  SaveTiff
     Save a matrix in TIFF format (16 bits per pixel)
 */
-int mfg::ImageMatrix::SaveTiff(char *filename)
+int ImageMatrix::SaveTiff(char *filename)
 {
 //#ifndef WIN32
    int x,y;
@@ -327,7 +324,7 @@ int mfg::ImageMatrix::SaveTiff(char *filename)
    filename -char *- full path to the image file
 */
 
-int mfg::ImageMatrix::LoadPPM(char *filename, int ColorMode)
+int ImageMatrix::LoadPPM(char *filename, int ColorMode)
 {  FILE *fi;
    char ty[256],line[256];
    byte *buffer;
@@ -396,7 +393,7 @@ int mfg::ImageMatrix::LoadPPM(char *filename, int ColorMode)
 }
 
 
-int mfg::ImageMatrix::OpenImage(char *image_file_name, int downsample, rect *bounding_rect, double mean, double stddev)
+int ImageMatrix::OpenImage(char *image_file_name, int downsample, rect *bounding_rect, double mean, double stddev)
 {  
 	int res=0;
 	#ifdef WIN32
@@ -452,7 +449,7 @@ int mfg::ImageMatrix::OpenImage(char *image_file_name, int downsample, rect *bou
 
 /* simple constructors */
 
-mfg::ImageMatrix::ImageMatrix()
+ImageMatrix::ImageMatrix()
 {
    data=NULL;
    width=0;
@@ -461,7 +458,7 @@ mfg::ImageMatrix::ImageMatrix()
    ColorMode=cmHSV;     /* set a diffult color mode */
 }
 
-mfg::ImageMatrix::ImageMatrix(int width, int height, int depth)
+ImageMatrix::ImageMatrix(int width, int height, int depth)
 {  
    bits=8; /* set some default value */
    if (depth<1) depth=1;    /* make sure the image is at least two dimensional */
@@ -477,7 +474,7 @@ mfg::ImageMatrix::ImageMatrix(int width, int height, int depth)
    (x1,y1) - top left
    (x2,y2) - bottom right
 */
-mfg::ImageMatrix::ImageMatrix(ImageMatrix *matrix,int x1, int y1, int x2, int y2, int z1, int z2)
+ImageMatrix::ImageMatrix(ImageMatrix *matrix,int x1, int y1, int x2, int y2, int z1, int z2)
 {  int x,y,z;
    bits=matrix->bits;
    ColorMode=matrix->ColorMode;
@@ -503,28 +500,28 @@ mfg::ImageMatrix::ImageMatrix(ImageMatrix *matrix,int x1, int y1, int x2, int y2
 }
 
 /* free the memory allocated in "ImageMatrix::LoadImage" */
-mfg::ImageMatrix::~ImageMatrix()
+ImageMatrix::~ImageMatrix()
 {  if (data) delete [] data;
    data=NULL;
 }
 
 /* get a pixel value */
-pix_data mfg::ImageMatrix::pixel(int x,int y,int z)
+pix_data ImageMatrix::pixel(int x,int y,int z)
 {  return(data[z*width*height+y*width+x]);
 }
 
 /* assigne a pixel value */
-void mfg::ImageMatrix::set(int x,int y,int z, pix_data val)
+void ImageMatrix::set(int x,int y,int z, pix_data val)
 {  data[z*width*height+y*width+x]=val;
 }
 
 /* assigne a pixel intensity only */
-void mfg::ImageMatrix::SetInt(int x,int y,int z, double val)
+void ImageMatrix::SetInt(int x,int y,int z, double val)
 {  data[z*width*height+y*width+x].intensity=val;
 }
 
 /* compute the difference from another image */
-void mfg::ImageMatrix::diff(ImageMatrix *matrix)
+void ImageMatrix::diff(ImageMatrix *matrix)
 {  int x,y,z;
    for (z=0;z<depth;z++)
      for (y=0;y<height;y++)
@@ -544,7 +541,7 @@ void mfg::ImageMatrix::diff(ImageMatrix *matrix)
 /* duplicate
    create another matrix the same as the first
 */
-ImageMatrix* mfg::ImageMatrix::duplicate()
+ImageMatrix* ImageMatrix::duplicate()
 { 
 	ImageMatrix *new_matrix;
 	new_matrix=new ImageMatrix;
@@ -600,7 +597,7 @@ void ImageMatrix::dump( )
 /* to8bits
    convert a 16 bit matrix to 8 bits
 */
-void mfg::ImageMatrix::to8bits()
+void ImageMatrix::to8bits()
 {  double max_val;
    if (bits==8) return;
    max_val=pow(2,bits)-1;
@@ -612,7 +609,7 @@ void mfg::ImageMatrix::to8bits()
 /* flip
    flip an image horizontaly
 */
-void mfg::ImageMatrix::flip()
+void ImageMatrix::flip()
 {  int x,y,z;
    pix_data temp;
    for (z=0;z<depth;z++)   
@@ -624,7 +621,7 @@ void mfg::ImageMatrix::flip()
        }
 }
 
-void mfg::ImageMatrix::invert()
+void ImageMatrix::invert()
 {  	   
    for (int a=0;a<width*height*depth;a++)
      data[a].intensity=(pow(2,bits)-1)-data[a].intensity;
@@ -634,7 +631,7 @@ void mfg::ImageMatrix::invert()
    down sample an image
    x_ratio, y_ratio -double- (0 to 1) the size of the new image comparing to the old one
 */
-void mfg::ImageMatrix::Downsample(double x_ratio, double y_ratio)
+void ImageMatrix::Downsample(double x_ratio, double y_ratio)
 {  double x,y,dx,dy,frac;
    int new_x,new_y,a;
    pix_data pix;
@@ -747,7 +744,7 @@ void mfg::ImageMatrix::Downsample(double x_ratio, double y_ratio)
    Rotate an image by 90, 120, or 270 degrees
    angle -double- (0 to 360) the degrees of rotation.  Only values of 90, 180, 270 are currently allowed
 */
-ImageMatrix* mfg::ImageMatrix::Rotate(double angle) {
+ImageMatrix* ImageMatrix::Rotate(double angle) {
 	ImageMatrix *new_matrix;
 	int new_x,new_y,new_width,new_height;
 	pix_data pix;
@@ -804,7 +801,7 @@ ImageMatrix* mfg::ImageMatrix::Rotate(double angle) {
 
 /* find basic intensity statistics */
 
-int mfg::compare_doubles (const void *a, const void *b)
+int compare_doubles (const void *a, const void *b)
 {
   if (*((double *)a) > *((double*)b)) return(1);
   if (*((double*)a) == *((double*)b)) return(0);
@@ -823,7 +820,7 @@ int mfg::compare_doubles (const void *a, const void *b)
    
    if one of the pointers is NULL, the corresponding value is not computed.
 */
-void mfg::ImageMatrix::BasicStatistics(double *mean, double *median, double *std, double *min, double *max, double *hist, int bins)
+void ImageMatrix::BasicStatistics(double *mean, double *median, double *std, double *min, double *max, double *hist, int bins)
 {  long pixel_index,num_pixels;
    double *pixels;
    double min1=INF,max1=-INF,mean_sum=0;
@@ -870,7 +867,7 @@ void mfg::ImageMatrix::BasicStatistics(double *mean, double *median, double *std
    mean -double- the mean of the normalized image (ignored if <0)
    stddev -double- the stddev of the normalized image (ignored if <0)
 */
-void mfg::ImageMatrix::normalize(double min, double max, long range, double mean, double stddev)
+void ImageMatrix::normalize(double min, double max, long range, double mean, double stddev)
 {  long x;
    /* normalized to min and max */
    if (min>=0 && max>0 && range>0)
@@ -898,7 +895,7 @@ void mfg::ImageMatrix::normalize(double min, double max, long range, double mean
 
 /* convolve
 */
-void mfg::ImageMatrix::convolve(ImageMatrix *filter)
+void ImageMatrix::convolve(ImageMatrix *filter)
 { int x,y,z;
   ImageMatrix *copy;
   int height2=filter->height/2;
@@ -946,7 +943,7 @@ for (int k=-depth2;k<=depth2;++k) {
    if values are NULL - the value is not computed
 */
 
-void mfg::ImageMatrix::GetColorStatistics(double *hue_avg, double *hue_std, double *sat_avg, double *sat_std, double *val_avg, double *val_std, double *max_color, double *colors)
+void ImageMatrix::GetColorStatistics(double *hue_avg, double *hue_std, double *sat_avg, double *sat_std, double *val_avg, double *val_std, double *max_color, double *colors)
 {  long a,color_index;
    color hsv;
    double max,pixel_num;
@@ -1010,7 +1007,7 @@ void mfg::ImageMatrix::GetColorStatistics(double *hue_avg, double *hue_std, doub
    use_hue -int- 0 if classifying colors, 1 if using the hue component of the HSV vector
    grey level represents a different color
 */
-void mfg::ImageMatrix::ColorTransform(double *color_hist, int use_hue)
+void ImageMatrix::ColorTransform(double *color_hist, int use_hue)
 {  
 	long x,y,z; //,base_color;
 	double cb_intensity;
@@ -1055,7 +1052,7 @@ void mfg::ImageMatrix::ColorTransform(double *color_hist, int use_hue)
 }
 
 /* get image histogram */
-void mfg::ImageMatrix::histogram(double *bins,unsigned short bins_num, int imhist)
+void ImageMatrix::histogram(double *bins,unsigned short bins_num, int imhist)
 {  long a;
    double min=INF,max=-INF;
    /* find the minimum and maximum */
@@ -1085,7 +1082,7 @@ void mfg::ImageMatrix::histogram(double *bins,unsigned short bins_num, int imhis
 
 /* fft 2 dimensional transform */
 // http://www.fftw.org/doc/
-double mfg::ImageMatrix::fft2()
+double ImageMatrix::fft2()
 {  fftw_complex *out;
    double *in;
    fftw_plan p;
@@ -1150,7 +1147,7 @@ double mfg::ImageMatrix::fft2()
 }
 
 /* chebyshev transform */
-void mfg::ImageMatrix::ChebyshevTransform(int N)
+void ImageMatrix::ChebyshevTransform(int N)
 {  double *out;
    int x,y,old_width;
 
@@ -1172,7 +1169,7 @@ void mfg::ImageMatrix::ChebyshevTransform(int N)
 /* chebyshev transform
    coeff -array of double- a pre-allocated array of 32 doubles
 */
-void mfg::ImageMatrix::ChebyshevFourierTransform2D(double *coeff)
+void ImageMatrix::ChebyshevFourierTransform2D(double *coeff)
 {  ImageMatrix *matrix;
    matrix=duplicate();
    if( (width * height) > (300 * 300) )
@@ -1183,7 +1180,7 @@ void mfg::ImageMatrix::ChebyshevFourierTransform2D(double *coeff)
 
 
 /* Symlet5 transform */
-void mfg::ImageMatrix::Symlet5Transform()
+void ImageMatrix::Symlet5Transform()
 {  long x,y,z;
    DataGrid2D *grid2d=NULL;
    DataGrid3D *grid3d=NULL;
@@ -1225,7 +1222,7 @@ void mfg::ImageMatrix::Symlet5Transform()
    coeff -array of double- pre-allocated memory of 20 doubles
    nibs_num - (32 is normal)
 */
-void mfg::ImageMatrix::ChebyshevStatistics2D(double *coeff, int N, int bins_num)
+void ImageMatrix::ChebyshevStatistics2D(double *coeff, int N, int bins_num)
 {
    if (N<2) N=20;
    if (N>MIN(width,height)) N=MIN(width,height);   
@@ -1236,7 +1233,7 @@ void mfg::ImageMatrix::ChebyshevStatistics2D(double *coeff, int N, int bins_num)
 /* CombFirstFourMoments
    vec should be pre-alocated array of 48 doubles
 */
-int mfg::ImageMatrix::CombFirstFourMoments2D(double *vec)
+int ImageMatrix::CombFirstFourMoments2D(double *vec)
 {  int count;
    ImageMatrix *matrix;
    if (bits==16) 
@@ -1251,7 +1248,7 @@ int mfg::ImageMatrix::CombFirstFourMoments2D(double *vec)
 }
 
 /* Edge Transform */
-void mfg::ImageMatrix::EdgeTransform()
+void ImageMatrix::EdgeTransform()
 {  long x,y,z;
    ImageMatrix *TempMatrix;
    TempMatrix=duplicate();
@@ -1279,7 +1276,7 @@ void mfg::ImageMatrix::EdgeTransform()
 }
 
 /* transform by gradient magnitude */
-void mfg::ImageMatrix::GradientMagnitude(int span)
+void ImageMatrix::GradientMagnitude(int span)
 {  long x,y,z;
    //double sum;
    if (span==0) span=2;  /* make sure 0 is not a default */
@@ -1293,7 +1290,7 @@ void mfg::ImageMatrix::GradientMagnitude(int span)
 }
 
 /* transform by gradient direction */
-void mfg::ImageMatrix::GradientDirection2D(int span)
+void ImageMatrix::GradientDirection2D(int span)
 {  long x,y;
    if (span==0) span=2;  /* make sure 0 is not a default */
    for (x=0;x<width-span;x++)
@@ -1308,7 +1305,7 @@ void mfg::ImageMatrix::GradientDirection2D(int span)
    output - a pre-allocated matrix that will hold the output (the input matrix is not changed)
             output should be of the same size as the input matrix
 */
-void mfg::ImageMatrix::PerwittMagnitude2D(ImageMatrix *output)
+void ImageMatrix::PerwittMagnitude2D(ImageMatrix *output)
 {  long x,y,z,i,j;
    double sumx,sumy;
    for (x=0;x<width;x++)
@@ -1336,7 +1333,7 @@ void mfg::ImageMatrix::PerwittMagnitude2D(ImageMatrix *output)
    output - a pre-allocated matrix that will hold the output (the input matrix is not changed)
             output should be of the same size as the input matrix
 */
-void mfg::ImageMatrix::PerwittDirection2D(ImageMatrix *output)
+void ImageMatrix::PerwittDirection2D(ImageMatrix *output)
 {  long x,y,z,i,j;
    double sumx,sumy;
    for (x=0;x<width;x++)
@@ -1378,7 +1375,7 @@ void mfg::ImageMatrix::PerwittDirection2D(ImageMatrix *output)
    DiffDirecHist -array of double- array of size num_bins/2 should be allocated
 */
 
-void mfg::ImageMatrix::EdgeStatistics(long *EdgeArea, double *MagMean, double *MagMedian, double *MagVar, double *MagHist, double *DirecMean, double *DirecMedian, double *DirecVar, double *DirecHist, double *DirecHomogeneity, double *DiffDirecHist, int num_bins)
+void ImageMatrix::EdgeStatistics(long *EdgeArea, double *MagMean, double *MagMedian, double *MagVar, double *MagHist, double *DirecMean, double *DirecMedian, double *DirecVar, double *DirecHist, double *DirecHomogeneity, double *DiffDirecHist, int num_bins)
 {  ImageMatrix *GradientMagnitude,*GradientDirection;
    long a,bin_index;
    double min,max,sum,max_intensity;
@@ -1427,7 +1424,7 @@ void mfg::ImageMatrix::EdgeStatistics(long *EdgeArea, double *MagMean, double *M
 /* radon transform
    vec -array of double- output column. a pre-allocated vector of the size 3*4=12
 */
-void mfg::ImageMatrix::RadonTransform2D(double *vec)
+void ImageMatrix::RadonTransform2D(double *vec)
 {   int x,y,val_index,output_size,vec_index,bin_index;
     double *pixels,*ptr,bins[3];
     int angle,num_angles=4;
@@ -1479,7 +1476,7 @@ void mfg::ImageMatrix::RadonTransform2D(double *vec)
 /* Otsu
    Find otsu threshold
 */
-double mfg::ImageMatrix::Otsu()
+double ImageMatrix::Otsu()
 {  long a; //,x,y;
    double hist[256],omega[256],mu[256],sigma_b2[256],maxval=-INF,sum,count;
    double max=pow(2,bits)-1;
@@ -1510,7 +1507,7 @@ double mfg::ImageMatrix::Otsu()
   OtsuBinaryMaskTransform
   Transforms an image to a binary image such that the threshold is otsu global threshold
 */
-double mfg::ImageMatrix::OtsuBinaryMaskTransform()
+double ImageMatrix::OtsuBinaryMaskTransform()
 {  double OtsuGlobalThreshold;
    double max=pow(2,bits)-1;
 
@@ -1530,14 +1527,14 @@ double mfg::ImageMatrix::OtsuBinaryMaskTransform()
     returned value -int- the number of objects found
 */
 //--------------------------------------------------------
-int mfg::ImageMatrix::BWlabel(int level)
+int ImageMatrix::BWlabel(int level)
 {
    return(bwlabel(this,level));
 }
 
 //--------------------------------------------------------
 
-void mfg::ImageMatrix::centroid(double *x_centroid, double *y_centroid, double *z_centroid)
+void ImageMatrix::centroid(double *x_centroid, double *y_centroid, double *z_centroid)
 {
    GlobalCentroid(this,x_centroid,y_centroid,z_centroid);
 }
@@ -1573,7 +1570,7 @@ int compare_ints (const void *a, const void *b)
   return(-1);
 }
 
-void mfg::ImageMatrix::FeatureStatistics(int *count, int *Euler, double *centroid_x, double *centroid_y, double *centroid_z, int *AreaMin, int *AreaMax,
+void ImageMatrix::FeatureStatistics(int *count, int *Euler, double *centroid_x, double *centroid_y, double *centroid_z, int *AreaMin, int *AreaMax,
                                     double *AreaMean, int *AreaMedian, double *AreaVar, int *area_histogram,double *DistMin, double *DistMax,
                                     double *DistMean, double *DistMedian, double *DistVar, int *dist_histogram, int num_bins)
 {  int object_index,inv_count;
@@ -1662,7 +1659,7 @@ void mfg::ImageMatrix::FeatureStatistics(int *count, int *Euler, double *centroi
 /* GaborFilters */
 /* ratios -array of double- a pre-allocated array of double[7]
 */
-void mfg::ImageMatrix::GaborFilters2D(double *ratios)
+void ImageMatrix::GaborFilters2D(double *ratios)
 {  GaborTextureFilters2D(this, ratios);
 }
 
@@ -1670,7 +1667,7 @@ void mfg::ImageMatrix::GaborFilters2D(double *ratios)
 /* haarlick
    output -array of double- a pre-allocated array of 28 doubles
 */
-void mfg::ImageMatrix::HaarlickTexture2D(double distance, double *out)
+void ImageMatrix::HaarlickTexture2D(double distance, double *out)
 {  if (distance<=0) distance=1;
    haarlick2D(this,distance,out);
 }
@@ -1683,7 +1680,7 @@ void mfg::ImageMatrix::HaarlickTexture2D(double distance, double *out)
    Here we used 4 histograms with number of bins being 3,5,7,9.
    out -array of double- a pre-allocated array of 24 bins
 */
-void mfg::ImageMatrix::MultiScaleHistogram(double *out)
+void ImageMatrix::MultiScaleHistogram(double *out)
 {  int a;
    double max=0;
    histogram(out,3,0);
@@ -1700,7 +1697,7 @@ void mfg::ImageMatrix::MultiScaleHistogram(double *out)
    Tamura texture signatures: coarseness, directionality, contrast
    vec -array of double- a pre-allocated array of 6 doubles
 */
-void mfg::ImageMatrix::TamuraTexture2D(double *vec)
+void ImageMatrix::TamuraTexture2D(double *vec)
 {
   Tamura3Sigs2D(this,vec);
 }
@@ -1710,13 +1707,10 @@ void mfg::ImageMatrix::TamuraTexture2D(double *vec)
                             (the actual size is returned by "output_size))
    output_size -* long- the number of enteries in the array "zvalues" (normally 72)
 */
-void mfg::ImageMatrix::zernike2D(double *zvalues, long *output_size)
+void ImageMatrix::zernike2D(double *zvalues, long *output_size)
 {  mb_zernike2D(this, 0, 0, zvalues, output_size);
 }
 
-/*
-} //end namespace mfg 
-*/
 #pragma package(smart_init)
 
 
